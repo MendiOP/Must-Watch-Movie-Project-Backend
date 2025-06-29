@@ -19,11 +19,6 @@ public class MovieController {
 
     private final MovieService movieService;
 
-  @GetMapping("/token")
-  public CsrfToken getToken(HttpServletRequest request) {
-      return (CsrfToken) request.getAttribute("_csrf");
-  }
-
     @GetMapping
     public ResponseEntity<List<MovieResponseDTO>> getAllMovies() {
         return ResponseEntity.ok(movieService.getAllMovies());

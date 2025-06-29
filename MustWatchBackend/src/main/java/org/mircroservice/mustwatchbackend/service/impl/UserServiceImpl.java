@@ -16,6 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -38,15 +41,19 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String verify(UserRequestDTO userRequestDTO) {
-      Authentication authenticate = authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(
-                      userRequestDTO.getUsername(), userRequestDTO.getPassword()));
+  public Map<String, String> verify(UserRequestDTO userRequestDTO) {
+    Authentication authenticate =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                userRequestDTO.getUsername(), userRequestDTO.getPassword()));
 
-      if(authenticate.isAuthenticated())
-          return jwtService.generateToken(userRequestDTO.getUsername());
+    if (authenticate.isAuthenticated()) {
+      Map<String, String> map = new HashMap<>();
+      map.put("token", jwtService.generateToken(userRequestDTO.getUsername()));
+      map.put("username", userRequestDTO.getUsername());
+      return map;
+    }
 
-      return "Failed to authenticate user";
+    return null;
   }
-
 }
