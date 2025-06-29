@@ -1,6 +1,7 @@
 package org.mircroservice.mustwatchbackend.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.mircroservice.mustwatchbackend.Authentication.JwtService;
 import org.mircroservice.mustwatchbackend.dto.UserRequestDTO;
 import org.mircroservice.mustwatchbackend.dto.UserResponseDTO;
 import org.mircroservice.mustwatchbackend.entity.User;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
   private final AuthenticationManager authenticationManager;
+  private final JwtService jwtService;
   BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
   @Override
@@ -36,15 +38,15 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserResponseDTO verify(UserRequestDTO userRequestDTO) {
-      authenticationManager.authenticate(
+  public String verify(UserRequestDTO userRequestDTO) {
+      Authentication authenticate = authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
                       userRequestDTO.getUsername(), userRequestDTO.getPassword()));
 
-      User authenticatedUser = userRepository.findByUsername(userRequestDTO.getUsername());
-      UserResponseDTO userResponseDTO = modelMapper.map(authenticatedUser, UserResponseDTO.class);
-      userResponseDTO.setPassword(null);
-      return userResponseDTO;
+      if(authenticate.isAuthenticated())
+          return jwtService.generateToken(userRequestDTO.getUsername());
+
+      return "Failed to authenticate user";
   }
 
 }

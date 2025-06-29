@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserRequestDTO userRequestDTO) {
         try {
-            UserResponseDTO user = userService.verify(userRequestDTO);
+            String user = userService.verify(userRequestDTO);
             return ResponseEntity.ok(user);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
