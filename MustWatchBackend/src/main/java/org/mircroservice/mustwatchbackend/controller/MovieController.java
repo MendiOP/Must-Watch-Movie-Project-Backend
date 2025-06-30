@@ -20,8 +20,8 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping
-    public ResponseEntity<List<MovieResponseDTO>> getAllMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+    public ResponseEntity<List<MovieResponseDTO>> getAllMovies(String userName) {
+        return ResponseEntity.ok(movieService.getAllMovies(userName));
     }
 
     @GetMapping("/{id}")
@@ -30,8 +30,8 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieRequestDTO dto) {
-        MovieResponseDTO createdMovie = movieService.addMovie(dto);
+    public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieRequestDTO dto, String userName) {
+        MovieResponseDTO createdMovie = movieService.addMovie(dto, userName);
         return new ResponseEntity<>(createdMovie, HttpStatus.CREATED);
     }
 

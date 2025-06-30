@@ -21,6 +21,7 @@ public class Movie {
     private int releaseYear;
     private int rating;
     private String genre;
+    private String userName;
 
     private LocalDateTime createdAt;
 

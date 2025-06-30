@@ -7,11 +7,11 @@ import org.mircroservice.mustwatchbackend.entity.Movie;
 import java.util.List;
 
 public interface MovieService {
-  List<MovieResponseDTO> getAllMovies();
+  List<MovieResponseDTO> getAllMovies(String userName);
 
   MovieResponseDTO getMovieById(String id);
 
-  MovieResponseDTO addMovie(MovieRequestDTO movieRequestDTO);
+  MovieResponseDTO addMovie(MovieRequestDTO movieRequestDTO, String userName);
 
   void deleteMovie(String id);
 
