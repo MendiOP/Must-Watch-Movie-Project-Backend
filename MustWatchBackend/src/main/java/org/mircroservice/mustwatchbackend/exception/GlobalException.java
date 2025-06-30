@@ -24,7 +24,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler(ArgumentMissingException.class)
-    public ResponseEntity<?> handleArgumentMissingException(BadCredentialsException ex) {
+    public ResponseEntity<?> handleArgumentMissingException(IllegalArgumentException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -7,6 +7,8 @@ import org.mircroservice.mustwatchbackend.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,8 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping
-    public ResponseEntity<List<MovieResponseDTO>> getAllMovies(String userName) {
+    public ResponseEntity<List<MovieResponseDTO>> getAllMovies(@AuthenticationPrincipal UserDetails userDetails) {
+        String userName = userDetails.getUsername();
         return ResponseEntity.ok(movieService.getAllMovies(userName));
     }
 
@@ -30,7 +33,8 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieRequestDTO dto, String userName) {
+    public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieRequestDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+        String userName = userDetails.getUsername();
         MovieResponseDTO createdMovie = movieService.addMovie(dto, userName);
         return new ResponseEntity<>(createdMovie, HttpStatus.CREATED);
     }
